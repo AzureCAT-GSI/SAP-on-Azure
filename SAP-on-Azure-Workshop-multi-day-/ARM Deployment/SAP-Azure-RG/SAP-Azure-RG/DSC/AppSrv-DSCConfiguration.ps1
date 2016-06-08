@@ -107,7 +107,7 @@ Node localhost
 
         $srcFile = 'https://allinstallfiles.blob.core.windows.net/sapbits'
         $dstPath = 'G:\'
-        $srcSAS  = '/SourceSAS:?st=2016-06-05T21%3A27%3A00Z&se=2016-06-06T21%3A27%3A00Z&sp=rl&sv=2015-04-05&sr=c&sig=jqYQlGz%2F9fuoXDA6KiLhEoo6k0%2BD6aoRd5gH%2FkQ8E0U%3D'
+        $srcSAS  = '/SourceSAS:?st=2016-06-08T14%3A04%3A00Z&se=2016-07-06T05%3A00%3A00Z&sp=rl&sv=2015-04-05&sr=c&sig=wv9KgQfxgvkfczb655XnVLmlTu%2B5DPkKziwWC3ViWj0%3D'
 
         & $AzCopyPath $srcFile, """$dstPath""", """$srcSAS""", "/S", "/Y", "/Z:$env:LocalAppData\Microsoft\Azure\AzCopy\SAPSetupFiles"
 		
