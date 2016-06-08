@@ -1,0 +1,65 @@
+<!--
+DTD for SAPinst KeyDB
+version: $Id: //inst/inst_scripts/lmti_005_REL/dtds/keydb.dtd#1 $
+author: Henrik Bennin (d027171), Thomas Klink (d027120)
+-->
+
+<!-- include the documentation DTD to define required docu elements -->
+<!ENTITY % docudtd SYSTEM "doc.dtd">
+%docudtd;
+
+<!--
+Tables consist of rows and they in turn of fields.
+The name of the fields is used for assigning them to columns.
+A table can belong to namespaces. If no namespace is specified,
+the global namespace is assumed.
+To keep external entities (XML snippets) valid one can summarize
+several tables in a tableset.
+-->
+
+<!ELEMENT tables (tableset)*>
+<!ATTLIST tables
+  version    CDATA #IMPLIED
+  changelist CDATA #IMPLIED>
+
+<!ELEMENT tableset (table)*>
+<!ATTLIST tableset
+  srcid CDATA #REQUIRED>
+
+<!ELEMENT table (doc-short?, doc-long?, columns, row*)>
+<!ATTLIST table
+  version    CDATA          "1.0"
+  name       NMTOKEN        #REQUIRED
+  namespaces NMTOKENS       #IMPLIED
+  srcid      CDATA          #IMPLIED
+  deprecated (true | false) #IMPLIED>
+
+<!ELEMENT columns (column)*>
+
+<!ELEMENT column (doc-short?, doc-long?, defaultproperties?, properties?)>
+<!ATTLIST column
+  name        NMTOKEN    #REQUIRED
+  width       CDATA      #IMPLIED>
+
+<!ELEMENT row (fld)*>
+
+<!ELEMENT fld (properties?, (strval | exp))>
+<!ATTLIST fld
+  name NMTOKEN #REQUIRED>
+
+<!ELEMENT strval (#PCDATA)>
+
+<!ELEMENT exp (#PCDATA)>
+
+<!ELEMENT properties (property+ | propertyContainer+)*>
+
+<!ELEMENT defaultproperties (property+ | propertyContainer+)*>
+<!ELEMENT property EMPTY>
+<!ATTLIST property
+  name  NMTOKEN #REQUIRED
+  value CDATA   #IMPLIED>
+
+<!ELEMENT propertyContainer (property+ | propertyContainer+)*>
+<!ATTLIST propertyContainer
+  name NMTOKEN #REQUIRED>
+

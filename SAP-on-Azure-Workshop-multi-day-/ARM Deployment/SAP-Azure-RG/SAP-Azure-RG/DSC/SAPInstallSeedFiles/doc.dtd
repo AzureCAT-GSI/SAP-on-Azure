@@ -1,0 +1,119 @@
+<!--
+  DTD for SAPinst documentation
+  version: $Id: //inst/inst_scripts/lmti_005_REL/dtds/doc.dtd#1 $
+  author: Henrik Bennin (d027171)
+-->
+
+<!ENTITY nbsp "&#160;">
+
+<!ELEMENT doc-pool (doc-jsclass | doc-enum | doc-moduleenum | doc-table | doc-value | doc-valuelist)*>
+<!ATTLIST doc-pool
+  package NMTOKEN #REQUIRED>
+
+<!ELEMENT doc-moduleenum EMPTY>
+<!ATTLIST doc-moduleenum
+  enum    NMTOKEN #REQUIRED
+  library NMTOKEN #REQUIRED
+  module  NMTOKEN #REQUIRED
+  struct  NMTOKEN #IMPLIED>
+
+<!ELEMENT doc-enum (doc-short?, doc-long?, doc-element*)>
+<!ATTLIST doc-enum
+  name NMTOKEN #REQUIRED>
+
+<!ELEMENT doc-element (doc-short?, doc-long?)>
+<!ATTLIST doc-element
+  value CDATA   #REQUIRED>
+
+<!ELEMENT doc-table (doc-short?, doc-long?)>
+<!ATTLIST doc-table
+  name NMTOKEN #REQUIRED>
+
+<!ELEMENT doc-valuelist ((doc-value | doc-link)+)>
+<!ATTLIST doc-valuelist
+  name NMTOKEN #REQUIRED>
+
+<!ELEMENT doc-link EMPTY>
+<!ATTLIST doc-link
+  towhat (table | value | valuelist) #REQUIRED
+  toname CDATA                       #REQUIRED>
+
+<!ELEMENT doc-jsclass (doc-short?, doc-long?, doc-constructor*, doc-jsproperties?,
+                       (doc-jsmethod | doc-function)*)>
+<!ATTLIST doc-jsclass
+  name       NMTOKEN      #REQUIRED
+  parent     NMTOKEN      #IMPLIED
+  deprecated (true|false) #IMPLIED
+  includes   CDATA        #IMPLIED
+  since      CDATA        #IMPLIED>
+
+<!ELEMENT doc-parameters ((doc-value | doc-link)*)>
+<!ELEMENT doc-jsproperties (doc-value*)>
+
+<!ELEMENT doc-jsmethod EMPTY>
+<!ATTLIST doc-jsmethod
+  name     NMTOKEN #REQUIRED
+  class    NMTOKEN #IMPLIED
+  function NMTOKEN #IMPLIED>
+
+<!ELEMENT doc-constructor (doc-short?, doc-long?, doc-precondition?, doc-parameters?, doc-exception*, doc-see-also?)>
+<!ATTLIST doc-constructor
+  since CDATA #IMPLIED>
+
+<!ELEMENT doc-function (doc-short?, doc-long?, doc-precondition?, doc-parameters?, doc-return?, doc-exception*, doc-see-also?)>
+<!ATTLIST doc-function
+  name        NMTOKEN      #REQUIRED
+  isMethod    (true|false) #IMPLIED
+  isStatic    (true|false) #IMPLIED
+  isProtected (true|false) #IMPLIED
+  deprecated  (true|false) #IMPLIED
+  since       CDATA        #IMPLIED>
+
+<!ELEMENT doc-value (doc-short?, doc-long?, (doc-simpletype | doc-enumtype | doc-valisttype | doc-arraytype | doc-objecttype))>
+<!ATTLIST doc-value
+  name        NMTOKEN      #REQUIRED
+  default     CDATA        #IMPLIED
+  access      (ro | rw)    #IMPLIED
+  isStatic    (true|false) #IMPLIED
+  isProtected (true|false) #IMPLIED
+  deprecated  (true|false) #IMPLIED>
+
+<!ELEMENT doc-simpletype EMPTY>
+<!ATTLIST doc-simpletype
+  type (bool | long | double | string | function | tablename) #REQUIRED>
+
+<!ELEMENT doc-enumtype EMPTY>
+<!ATTLIST doc-enumtype
+  enum NMTOKEN #REQUIRED>
+
+<!ELEMENT doc-valisttype (doc-simpletype | doc-enumtype | doc-arraytype | doc-objecttype)>
+
+<!ELEMENT doc-arraytype (doc-simpletype | doc-enumtype | doc-arraytype | doc-objecttype)>
+
+<!ELEMENT doc-objecttype EMPTY>
+<!ATTLIST doc-objecttype
+  class NMTOKEN #REQUIRED>
+
+<!ELEMENT doc-precondition (#PCDATA | doc-see | code | pre)*>
+
+<!ELEMENT doc-return (#PCDATA | doc-see | code | pre)*>
+<!ATTLIST doc-return
+  type CDATA #IMPLIED>
+
+<!ELEMENT doc-short (#PCDATA | doc-see | code | pre)*>
+
+<!ELEMENT doc-long (#PCDATA | doc-see | code | pre)*>
+
+<!ELEMENT doc-see (#PCDATA)>
+<!ATTLIST doc-see
+  href CDATA #REQUIRED>
+
+<!ELEMENT doc-see-also (doc-see+)>
+
+<!ELEMENT doc-exception (doc-short?, doc-long?)>
+<!ATTLIST doc-exception
+  type CDATA #REQUIRED>
+
+<!ELEMENT code (#PCDATA)>
+
+<!ELEMENT pre (#PCDATA)>
