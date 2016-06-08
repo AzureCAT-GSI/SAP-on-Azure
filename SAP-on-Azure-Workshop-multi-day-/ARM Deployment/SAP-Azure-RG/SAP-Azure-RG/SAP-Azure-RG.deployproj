@@ -1,0 +1,182 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|AnyCPU">
+      <Configuration>Debug</Configuration>
+      <Platform>AnyCPU</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|AnyCPU">
+      <Configuration>Release</Configuration>
+      <Platform>AnyCPU</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>101c9506-db1b-4e70-8a4a-922752198e03</ProjectGuid>
+  </PropertyGroup>
+  <PropertyGroup>
+    <TargetFrameworkIdentifier>Deployment</TargetFrameworkIdentifier>
+    <TargetFrameworkVersion>1.0</TargetFrameworkVersion>
+    <PrepareForBuildDependsOn>
+    </PrepareForBuildDependsOn>
+  </PropertyGroup>
+  <Import Condition=" Exists('Deployment.targets') " Project="Deployment.targets" />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.Common.targets" />
+  <!-- vertag<:>start tokens<:>maj.min -->
+  <Import Condition=" Exists('$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Deployment\1.1\DeploymentProject.targets') " Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Deployment\1.1\DeploymentProject.targets" />
+  <!-- vertag<:>end -->
+  <ItemGroup>
+    <Folder Include="Templates\" />
+    <Folder Include="Tools\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Deployment.targets">
+      <Visible>False</Visible>
+    </None>
+    <Content Include="Deployments\vnet-with-custom-dns.json" />
+    <Content Include="Scripts\Deploy-AzureResourceGroup.ps1" />
+    <Content Include="Templates\azuredeploy.json" />
+    <Content Include="Templates\azuredeploy.parameters.json" />
+    <Content Include="DSC\ADPDC-DSCConfiguration.ps1" />
+    <None Include="DSC\AppSrv-DSCConfiguration.ps1" />
+    <None Include="DSC\AzCopy\AzCopy.exe" />
+    <None Include="DSC\AzCopy\Microsoft.Data.Edm.dll" />
+    <None Include="DSC\AzCopy\Microsoft.Data.OData.dll" />
+    <None Include="DSC\AzCopy\Microsoft.Data.Services.Client.dll" />
+    <None Include="DSC\AzCopy\Microsoft.WindowsAzure.Storage.DataMovement.dll" />
+    <None Include="DSC\AzCopy\Microsoft.WindowsAzure.Storage.dll" />
+    <None Include="DSC\cNtfsAccessControl\cNtfsAccessControl.psd1" />
+    <None Include="DSC\cNtfsAccessControl\DSCResources\cNtfsPermissionEntry\cNtfsPermissionEntry.psm1" />
+    <None Include="DSC\cNtfsAccessControl\DSCResources\cNtfsPermissionEntry\cNtfsPermissionEntry.schema.mof" />
+    <None Include="DSC\cUserRightsAssignment\1.0.1.0\appveyor.yml" />
+    <None Include="DSC\cUserRightsAssignment\1.0.1.0\cUserRightsAssignment.psd1" />
+    <None Include="DSC\cUserRightsAssignment\1.0.1.0\DSCResources\cUserRight\cUserRight.psm1" />
+    <None Include="DSC\cUserRightsAssignment\1.0.1.0\DSCResources\cUserRight\cUserRight.schema.mof" />
+    <None Include="DSC\Installers\WindowsAzureVmAgent.2.7.1198.735.rd_art_stable.150912-1548.fre.msi" />
+    <None Include="DSC\SAPInstallSeedFiles\doc.dtd" />
+    <None Include="DSC\SAPInstallSeedFiles\inifile.xml" />
+    <None Include="DSC\SAPInstallSeedFiles\keydb.dtd" />
+    <None Include="DSC\SAPInstallSeedFiles\start_dir.cd" />
+    <None Include="DSC\SAPOnAzure\saponazure.psm1" />
+    <None Include="DSC\xActiveDirectory\2.9.0.0\appveyor.yml" />
+    <None Include="DSC\xActiveDirectory\2.9.0.0\Assert-HADC.ps1" />
+    <None Include="DSC\xActiveDirectory\2.9.0.0\Assert-ParentChildDomains.ps1" />
+    <None Include="DSC\xActiveDirectory\2.9.0.0\DSCResources\MSFT_xADDomainController\MSFT_xADDomainController.psm1" />
+    <None Include="DSC\xActiveDirectory\2.9.0.0\DSCResources\MSFT_xADDomainController\MSFT_xADDomainController.schema.mof" />
+    <None Include="DSC\xActiveDirectory\2.9.0.0\DSCResources\MSFT_xADDomainTrust\MSFT_xADDomainTrust.psm1" />
+    <None Include="DSC\xActiveDirectory\2.9.0.0\DSCResources\MSFT_xADDomainTrust\MSFT_xADDomainTrust.schema.mof" />
+    <None Include="DSC\xActiveDirectory\2.9.0.0\DSCResources\MSFT_xADDomain\MSFT_xADDomain.psm1" />
+    <None Include="DSC\xActiveDirectory\2.9.0.0\DSCResources\MSFT_xADDomain\MSFT_xADDomain.schema.mof" />
+    <None Include="DSC\xActiveDirectory\2.9.0.0\DSCResources\MSFT_xADGroup\MSFT_xADGroup.psm1" />
+    <None Include="DSC\xActiveDirectory\2.9.0.0\DSCResources\MSFT_xADGroup\MSFT_xADGroup.schema.mof" />
+    <None Include="DSC\xActiveDirectory\2.9.0.0\DSCResources\MSFT_xADOrganizationalUnit\MSFT_xADOrganizationalUnit.psm1" />
+    <None Include="DSC\xActiveDirectory\2.9.0.0\DSCResources\MSFT_xADOrganizationalUnit\MSFT_xADOrganizationalUnit.schema.mof" />
+    <None Include="DSC\xActiveDirectory\2.9.0.0\DSCResources\MSFT_xADRecycleBin\Examples\xActiveDirectory_xADRecycleBin.ps1" />
+    <None Include="DSC\xActiveDirectory\2.9.0.0\DSCResources\MSFT_xADRecycleBin\MSFT_xADRecycleBin.psm1" />
+    <None Include="DSC\xActiveDirectory\2.9.0.0\DSCResources\MSFT_xADRecycleBin\MSFT_xADRecycleBin.schema.mof" />
+    <None Include="DSC\xActiveDirectory\2.9.0.0\DSCResources\MSFT_xADRecycleBin\ResourceDesignerScripts\GeneratexADRecycleBinSchema.ps1" />
+    <None Include="DSC\xActiveDirectory\2.9.0.0\DSCResources\MSFT_xADUser\MSFT_xADUser.psm1" />
+    <None Include="DSC\xActiveDirectory\2.9.0.0\DSCResources\MSFT_xADUser\MSFT_xADUser.schema.mof" />
+    <None Include="DSC\xActiveDirectory\2.9.0.0\DSCResources\MSFT_xWaitForADDomain\MSFT_xWaitForADDomain.psm1" />
+    <None Include="DSC\xActiveDirectory\2.9.0.0\DSCResources\MSFT_xWaitForADDomain\MSFT_xWaitForADDomain.schema.mof" />
+    <None Include="DSC\xActiveDirectory\2.9.0.0\HADCConfiguration.psd1" />
+    <None Include="DSC\xActiveDirectory\2.9.0.0\Misc\New-ADDomainTrust.ps1" />
+    <None Include="DSC\xActiveDirectory\2.9.0.0\ParentChildConfig.psd1" />
+    <None Include="DSC\xActiveDirectory\2.9.0.0\xActiveDirectory.psd1" />
+    <None Include="DSC\xComputerManagement\1.4.0.0\appveyor.yml" />
+    <None Include="DSC\xComputerManagement\1.4.0.0\DSCResources\MSFT_xComputer\MSFT_xComputer.psm1" />
+    <None Include="DSC\xComputerManagement\1.4.0.0\DSCResources\MSFT_xComputer\MSFT_xComputer.schema.mof" />
+    <None Include="DSC\xComputerManagement\1.4.0.0\xComputerManagement.psd1" />
+    <None Include="DSC\xNetworking\2.7.0.0\appveyor.yml" />
+    <None Include="DSC\xNetworking\2.7.0.0\DSCResources\MSFT_xDefaultGatewayAddress\MSFT_xDefaultGatewayAddress.psm1" />
+    <None Include="DSC\xNetworking\2.7.0.0\DSCResources\MSFT_xDefaultGatewayAddress\MSFT_xDefaultGatewayAddress.schema.mof" />
+    <None Include="DSC\xNetworking\2.7.0.0\DSCResources\MSFT_xDhcpClient\MSFT_xDhcpClient.psm1" />
+    <None Include="DSC\xNetworking\2.7.0.0\DSCResources\MSFT_xDhcpClient\MSFT_xDhcpClient.schema.mof" />
+    <None Include="DSC\xNetworking\2.7.0.0\DSCResources\MSFT_xDnsConnectionSuffix\MSFT_xDnsConnectionSuffix.psm1" />
+    <None Include="DSC\xNetworking\2.7.0.0\DSCResources\MSFT_xDnsConnectionSuffix\MSFT_xDnsConnectionSuffix.schema.mof" />
+    <None Include="DSC\xNetworking\2.7.0.0\DSCResources\MSFT_xDNSServerAddress\MSFT_xDNSServerAddress.psm1" />
+    <None Include="DSC\xNetworking\2.7.0.0\DSCResources\MSFT_xDNSServerAddress\MSFT_xDNSServerAddress.schema.mof" />
+    <None Include="DSC\xNetworking\2.7.0.0\DSCResources\MSFT_xFirewall\MSFT_xFirewall.psm1" />
+    <None Include="DSC\xNetworking\2.7.0.0\DSCResources\MSFT_xFirewall\MSFT_xFirewall.Schema.mof" />
+    <None Include="DSC\xNetworking\2.7.0.0\DSCResources\MSFT_xIPAddress\MSFT_xIPAddress.psm1" />
+    <None Include="DSC\xNetworking\2.7.0.0\DSCResources\MSFT_xIPAddress\MSFT_xIPAddress.schema.mof" />
+    <None Include="DSC\xNetworking\2.7.0.0\DSCResources\MSFT_xNetBIOS\en-US\MSFT_xNetBIOS.psd1" />
+    <None Include="DSC\xNetworking\2.7.0.0\DSCResources\MSFT_xNetBIOS\MSFT_xNetBIOS.psm1" />
+    <None Include="DSC\xNetworking\2.7.0.0\DSCResources\MSFT_xNetBIOS\MSFT_xNetBIOS.schema.mof" />
+    <None Include="DSC\xNetworking\2.7.0.0\DSCResources\MSFT_xNetConnectionProfile\MSFT_xNetConnectionProfile.psm1" />
+    <None Include="DSC\xNetworking\2.7.0.0\DSCResources\MSFT_xNetConnectionProfile\MSFT_xNetConnectionProfile.schema.mof" />
+    <None Include="DSC\xNetworking\2.7.0.0\DSCResources\MSFT_xNetworkTeam\en-US\MSFT_xNetworkTeam.psd1" />
+    <None Include="DSC\xNetworking\2.7.0.0\DSCResources\MSFT_xNetworkTeam\MSFT_xNetworkTeam.psm1" />
+    <None Include="DSC\xNetworking\2.7.0.0\DSCResources\MSFT_xNetworkTeam\MSFT_xNetworkTeam.schema.mof" />
+    <None Include="DSC\xNetworking\2.7.0.0\DSCResources\MSFT_xRoute\MSFT_xRoute.psm1" />
+    <None Include="DSC\xNetworking\2.7.0.0\DSCResources\MSFT_xRoute\MSFT_xRoute.schema.mof" />
+    <None Include="DSC\xNetworking\2.7.0.0\Templates\integration_config_template.ps1" />
+    <None Include="DSC\xNetworking\2.7.0.0\Templates\integration_template.ps1" />
+    <None Include="DSC\xNetworking\2.7.0.0\Templates\unit_template.ps1" />
+    <None Include="DSC\xNetworking\2.7.0.0\xNetworking.psd1" />
+    <None Include="DSC\xPendingReboot\0.2.0.0\appveyor.yml" />
+    <None Include="DSC\xPendingReboot\0.2.0.0\DSCResources\MSFT_xPendingReboot\MSFT_xPendingReboot.psm1" />
+    <None Include="DSC\xPendingReboot\0.2.0.0\DSCResources\MSFT_xPendingReboot\MSFT_xPendingReboot.schema.mof" />
+    <None Include="DSC\xPendingReboot\0.2.0.0\xPendingReboot.psd1" />
+    <None Include="DSC\xSQLServer\1.4.0.0\appveyor.yml" />
+    <None Include="DSC\xSQLServer\1.4.0.0\DSCResources\MSFT_xSQLDatabaseRecoveryModel\MSFT_xSQLDatabaseRecoveryModel.psm1" />
+    <None Include="DSC\xSQLServer\1.4.0.0\DSCResources\MSFT_xSQLDatabaseRecoveryModel\MSFT_xSQLDatabaseRecoveryModel.schema.mof" />
+    <None Include="DSC\xSQLServer\1.4.0.0\DSCResources\MSFT_xSQLServerDatabaseOwner\MSFT_xSQLServerDatabaseOwner.psm1" />
+    <None Include="DSC\xSQLServer\1.4.0.0\DSCResources\MSFT_xSQLServerDatabaseOwner\MSFT_xSQLServerDatabaseOwner.schema.mof" />
+    <None Include="DSC\xSQLServer\1.4.0.0\DSCResources\MSFT_xSQLServerDatabasePermissions\MSFT_xSQLServerDatabasePermissions.psm1" />
+    <None Include="DSC\xSQLServer\1.4.0.0\DSCResources\MSFT_xSQLServerDatabasePermissions\MSFT_xSQLServerDatabasePermissions.schema.mof" />
+    <None Include="DSC\xSQLServer\1.4.0.0\DSCResources\MSFT_xSQLServerDatabaseRole\MSFT_xSQLServerDatabaseRole.psm1" />
+    <None Include="DSC\xSQLServer\1.4.0.0\DSCResources\MSFT_xSQLServerDatabaseRole\MSFT_xSQLServerDatabaseRole.schema.mof" />
+    <None Include="DSC\xSQLServer\1.4.0.0\DSCResources\MSFT_xSQLServerFailoverClusterSetup\MSFT_xSQLServerFailoverClusterSetup.psm1" />
+    <None Include="DSC\xSQLServer\1.4.0.0\DSCResources\MSFT_xSQLServerFailoverClusterSetup\MSFT_xSQLServerFailoverClusterSetup.schema.mof" />
+    <None Include="DSC\xSQLServer\1.4.0.0\DSCResources\MSFT_xSQLServerFirewall\MSFT_xSQLServerFirewall.psm1" />
+    <None Include="DSC\xSQLServer\1.4.0.0\DSCResources\MSFT_xSQLServerFirewall\MSFT_xSQLServerFirewall.schema.mof" />
+    <None Include="DSC\xSQLServer\1.4.0.0\DSCResources\MSFT_xSQLServerLogin\MSFT_xSQLServerLogin.psm1" />
+    <None Include="DSC\xSQLServer\1.4.0.0\DSCResources\MSFT_xSQLServerLogin\MSFT_xSQLServerLogin.schema.mof" />
+    <None Include="DSC\xSQLServer\1.4.0.0\DSCResources\MSFT_xSQLServerMaxDop\MSFT_xSQLServerMaxDop.psm1" />
+    <None Include="DSC\xSQLServer\1.4.0.0\DSCResources\MSFT_xSQLServerMaxDop\MSFT_xSQLServerMaxDop.schema.mof" />
+    <None Include="DSC\xSQLServer\1.4.0.0\DSCResources\MSFT_xSQLServerMemory\MSFT_xSQLServerMemory.psm1" />
+    <None Include="DSC\xSQLServer\1.4.0.0\DSCResources\MSFT_xSQLServerMemory\MSFT_xSQLServerMemory.schema.mof" />
+    <None Include="DSC\xSQLServer\1.4.0.0\DSCResources\MSFT_xSQLServerPowerPlan\MSFT_xSQLServerPowerPlan.psm1" />
+    <None Include="DSC\xSQLServer\1.4.0.0\DSCResources\MSFT_xSQLServerPowerPlan\MSFT_xSQLServerPowerPlan.schema.mof" />
+    <None Include="DSC\xSQLServer\1.4.0.0\DSCResources\MSFT_xSQLServerRSConfig\MSFT_xSQLServerRSConfig.psm1" />
+    <None Include="DSC\xSQLServer\1.4.0.0\DSCResources\MSFT_xSQLServerRSConfig\MSFT_xSQLServerRSConfig.schema.mof" />
+    <None Include="DSC\xSQLServer\1.4.0.0\DSCResources\MSFT_xSQLServerRSSecureConnectionLevel\MSFT_xSQLServerRSSecureConnectionLevel.psm1" />
+    <None Include="DSC\xSQLServer\1.4.0.0\DSCResources\MSFT_xSQLServerRSSecureConnectionLevel\MSFT_xSQLServerRSSecureConnectionLevel.schema.mof" />
+    <None Include="DSC\xSQLServer\1.4.0.0\DSCResources\MSFT_xSQLServerSetup\MSFT_xSQLServerSetup.psm1" />
+    <None Include="DSC\xSQLServer\1.4.0.0\DSCResources\MSFT_xSQLServerSetup\MSFT_xSQLServerSetup.schema.mof" />
+    <None Include="DSC\xSQLServer\1.4.0.0\DSCResources\xSQLServerNetwork\xSQLServerNetwork.psm1" />
+    <None Include="DSC\xSQLServer\1.4.0.0\DSCResources\xSQLServerNetwork\xSQLServerNetwork.schema.mof" />
+    <None Include="DSC\xSQLServer\1.4.0.0\en-US\xPDT.strings.psd1" />
+    <None Include="DSC\xSQLServer\1.4.0.0\en-US\xSQLServer.strings.psd1" />
+    <None Include="DSC\xSQLServer\1.4.0.0\xPDT.psm1" />
+    <None Include="DSC\xSQLServer\1.4.0.0\xPDT.xml" />
+    <None Include="DSC\xSQLServer\1.4.0.0\xSQLServer.psd1" />
+    <None Include="DSC\xSQLServer\1.4.0.0\xSQLServerHelper.psm1" />
+    <None Include="DSC\xStorage\DSCResources\MSFT_xDisk\MSFT_xDisk.psm1" />
+    <None Include="DSC\xStorage\DSCResources\MSFT_xDisk\MSFT_xDisk.schema.mof" />
+    <None Include="DSC\xStorage\DSCResources\MSFT_xMountImage\MSFT_xMountImage.psm1" />
+    <None Include="DSC\xStorage\DSCResources\MSFT_xMountImage\MSFT_xMountImage.schema.mof" />
+    <None Include="DSC\xStorage\DSCResources\MSFT_xWaitForDisk\MSFT_xWaitForDisk.psm1" />
+    <None Include="DSC\xStorage\DSCResources\MSFT_xWaitForDisk\MSFT_xWaitForDisk.schema.mof" />
+    <None Include="DSC\xStorage\xStorage.psd1" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Tools\AzCopy.exe" />
+    <Content Include="Tools\Microsoft.Data.Edm.dll">
+      <Visible>False</Visible>
+    </Content>
+    <Content Include="Tools\Microsoft.Data.OData.dll">
+      <Visible>False</Visible>
+    </Content>
+    <Content Include="Tools\Microsoft.Data.Services.Client.dll">
+      <Visible>False</Visible>
+    </Content>
+    <Content Include="Tools\Microsoft.WindowsAzure.Storage.dll">
+      <Visible>False</Visible>
+    </Content>
+    <Content Include="Tools\Microsoft.WindowsAzure.Storage.DataMovement.dll">
+      <Visible>False</Visible>
+    </Content>
+  </ItemGroup>
+  <Target Name="GetReferenceAssemblyPaths" />
+</Project>

@@ -1,0 +1,65 @@
+﻿{
+  "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "vnetName": {
+      "type": "string"
+    },
+    "vnetPrefix": {
+      "type": "string"
+    },
+    "vnetSubnet1Name": {
+      "type": "string"
+    },
+    "vnetSubnet1Prefix": {
+      "type": "string"
+    },
+    "vnetSubnet2Name": {
+      "type": "string"
+    },
+    "vnetSubnet2Prefix": {
+      "type": "string"
+    },
+    "dnsServerAddress": {
+      "type": "string"
+    }
+  },
+  "resources": [
+    {
+      "name": "VNET",
+      "type": "Microsoft.Network/virtualNetworks",
+      "location": "[resourceGroup().location]",
+      "apiVersion": "2015-06-15",
+      "dependsOn": [ ],
+      "tags": {
+        "displayName": "VNET"
+      },
+      "properties": {
+        "addressSpace": {
+          "addressPrefixes": [
+            "[parameters('vnetPrefix')]"
+          ]
+        },
+        "dhcpOptions": {
+          "dnsServers": [ "[parameters('dnsServerAddress')]" ]
+        },
+        "subnets": [
+          {
+            "name": "[parameters('vnetSubnet1Name')]",
+            "properties": {
+              "addressPrefix": "[parameters('vnetSubnet1Prefix')]"
+            }
+          },
+          {
+            "name": "[parameters('vnetSubnet2Name')]",
+            "properties": {
+              "addressPrefix": "[parameters('vnetSubnet2Prefix')]"
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "outputs": {
+  }
+}

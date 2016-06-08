@@ -1,0 +1,442 @@
+﻿{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "_artifactsLocation": {
+      "type": "string",
+      "metadata": {
+        "description": "Auto-generated container in staging storage account to receive post-build staging folder upload"
+      }
+    },
+    "_artifactsLocationSasToken": {
+      "type": "securestring",
+      "metadata": {
+        "description": "Auto-generated token to access _artifactsLocation"
+      }
+    }
+  },
+  "variables": {
+    "VNETPrefix": "10.10.0.0/16",
+    "VNETSubnet1Name": "Mgt",
+    "VNETSubnet1Prefix": "10.10.1.0/24",
+    "VNETSubnet2Name": "App",
+    "VNETSubnet2Prefix": "10.10.2.0/24",
+
+    "AppSrv-WindowsOSVersion": "Enterprise",
+
+    "AdminUserName": "AdminUser",
+    "AdminPassword": "P@ssword1",
+
+    "StorageType": "Standard_LRS",
+    "StorageName": "[concat('storage', uniqueString(resourceGroup().id))]",
+
+    // SAP Server VM Settings
+    "AppSrv-1Name": "SAPApDB1",
+    "AppSrv-1ImagePublisher": "MicrosoftSQLServer",
+    "AppSrv-1ImageOffer": "SQL2014-WS2012R2",
+    "AppSrv-1OSDiskName": "SAPApDB1-OSDisk",
+    "AppSrv-1VmSize": "Standard_D12",
+    "AppSrv-1VnetID": "[resourceId('Microsoft.Network/virtualNetworks', 'VNET')]",
+    "AppSrv-1SubnetRef": "[concat(variables('AppSrv-1VnetID'), '/subnets/', variables('VNETSubnet2Name'))]",
+    "AppSrv-1StorageAccountContainerName": "vhds",
+    "AppSrv-1NicName": "[concat(variables('AppSrv-1Name'), 'NetworkInterface')]",
+    "AppSrv-PublicIPName": "SAPApDB1-PublicIP",
+    "AppSrv-PublicIPDnsName": "[concat('appsrv-', uniqueString(resourceGroup().id))]",
+    "AppSrv-DSCConfigurationFunction": "AppSrv-DSCConfiguration.ps1\\Main",
+
+    "ADImagePublisher": "MicrosoftWindowsServer",
+    "ADImageOffer": "WindowsServer",
+    "ADVmSize": "Standard_A2",
+    "ADVnetID": "[resourceId('Microsoft.Network/virtualNetworks', 'VNET')]",
+    "ADSubnetRef": "[concat(variables('ADVnetID'), '/subnets/', variables('VNETSubnet1Name'))]",
+    "ADStorageAccountContainerName": "vhds",
+    "ADWindowsOSVersion": "2012-R2-Datacenter",
+
+    // PDC VM Settings
+    "ADPDCOSDiskName": "ADPDCOSDisk",
+    "ADPDCNicName": "[concat(variables('ADPDCName'), 'NetworkInterface')]",
+    "ADPDCStaticIP": "10.10.1.4",
+    "ADPDCName": "ADPDC",
+    "ADPDC-PublicIPDnsName": "[concat('adpdc-', uniqueString(resourceGroup().id))]",
+    "ADPDC-PublicIPName": "ADPDC-PublicIP",
+
+    // PDC DSC Configuration Script
+    "ADPDC-DSCConfigurationFunction": "ADPDC-DSCConfiguration.ps1\\Main"
+  },
+  "resources": [
+    {
+      "name": "VNET",
+      "type": "Microsoft.Network/virtualNetworks",
+      "location": "[resourceGroup().location]",
+      "apiVersion": "2015-05-01-preview",
+      "dependsOn": [ ],
+      "tags": {
+        "displayName": "VNET"
+      },
+      "properties": {
+        "addressSpace": {
+          "addressPrefixes": [
+            "[variables('VNETPrefix')]"
+          ]
+        },
+        "subnets": [
+          {
+            "name": "[variables('VNETSubnet1Name')]",
+            "properties": {
+              "addressPrefix": "[variables('VNETSubnet1Prefix')]"
+            }
+          },
+          {
+            "name": "[variables('VNETSubnet2Name')]",
+            "properties": {
+              "addressPrefix": "[variables('VNETSubnet2Prefix')]"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "[variables('StorageName')]",
+      "type": "Microsoft.Storage/storageAccounts",
+      "location": "[resourceGroup().location]",
+      "apiVersion": "2015-06-15",
+      "dependsOn": [ ],
+      "tags": {
+        "displayName": "Storage"
+      },
+      "properties": {
+        "accountType": "[variables('StorageType')]"
+      }
+    },
+    {
+      "name": "[variables('AppSrv-1NicName')]",
+      "type": "Microsoft.Network/networkInterfaces",
+      "location": "[resourceGroup().location]",
+      "apiVersion": "2015-05-01-preview",
+      "dependsOn": [
+        "[concat('Microsoft.Network/virtualNetworks/', 'VNET')]",
+        "[concat('Microsoft.Network/publicIPAddresses/', variables('AppSrv-PublicIPName'))]"
+      ],
+      "tags": {
+        "displayName": "SAPApDB1-Nic"
+      },
+      "properties": {
+        "ipConfigurations": [
+          {
+            "name": "ipconfig1",
+            "properties": {
+              "privateIPAllocationMethod": "Dynamic",
+              "subnet": {
+                "id": "[variables('AppSrv-1SubnetRef')]"
+              },
+              "publicIPAddress": {
+                "id": "[resourceId('Microsoft.Network/publicIPAddresses', variables('AppSrv-PublicIPName'))]"
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "[variables('AppSrv-1Name')]",
+      "type": "Microsoft.Compute/virtualMachines",
+      "location": "[resourceGroup().location]",
+      "apiVersion": "2015-05-01-preview",
+      "dependsOn": [
+        "[concat('Microsoft.Storage/storageAccounts/', variables('StorageName'))]",
+        "[concat('Microsoft.Network/networkInterfaces/', variables('AppSrv-1NicName'))]"
+      ],
+      "tags": {
+        "displayName": "SAPApDB1"
+      },
+      "properties": {
+        "hardwareProfile": {
+          "vmSize": "[variables('AppSrv-1VmSize')]"
+        },
+        "osProfile": {
+          "computerName": "[variables('AppSrv-1Name')]",
+          "adminUsername": "[variables('AdminUsername')]",
+          "adminPassword": "[variables('AdminPassword')]"
+        },
+        "storageProfile": {
+          "imageReference": {
+            "publisher": "[variables('AppSrv-1ImagePublisher')]",
+            "offer": "[variables('AppSrv-1ImageOffer')]",
+            "sku": "[variables('AppSrv-WindowsOSVersion')]",
+            "version": "latest"
+          },
+          "osDisk": {
+            "name": "SAPApDB1-OSDisk",
+            "vhd": {
+              "uri": "[concat('http://', variables('StorageName'), '.blob.core.windows.net/', variables('AppSrv-1StorageAccountContainerName'), '/', variables('AppSrv-1OSDiskName'), '.vhd')]"
+            },
+            "caching": "ReadWrite",
+            "createOption": "FromImage"
+          },
+          "dataDisks": [
+            {
+              "name": "SAPApDB1-DataDisk-1",
+              "lun": 0,
+              "createOption": "Empty",
+              "vhd": {
+                "uri": "[concat('http://', variables('StorageName'), '.blob.core.windows.net/', variables('AppSrv-1StorageAccountContainerName'), '/SAPApDB1-DataDisk-1.vhd')]"
+              },
+              "caching": "None",
+              "diskSizeGB": "1023"
+            },
+            {
+              "name": "SAPApDB1-DataDisk-2",
+              "lun": 1,
+              "createOption": "Empty",
+              "vhd": {
+                "uri": "[concat('http://', variables('StorageName'), '.blob.core.windows.net/', variables('AppSrv-1StorageAccountContainerName'), '/SAPApDB1-DataDisk-2.vhd')]"
+              },
+              "caching": "None",
+              "diskSizeGB": "1023"
+            },
+            {
+              "name": "SAPApDB1-DataDisk-3",
+              "lun": 2,
+              "createOption": "Empty",
+              "vhd": {
+                "uri": "[concat('http://', variables('StorageName'), '.blob.core.windows.net/', variables('AppSrv-1StorageAccountContainerName'), '/SAPApDB1-DataDisk-3.vhd')]"
+              },
+              "caching": "None",
+              "diskSizeGB": "1023"
+            }
+          ]
+        },
+        "networkProfile": {
+          "networkInterfaces": [
+            {
+              "id": "[resourceId('Microsoft.Network/networkInterfaces', variables('AppSrv-1NicName'))]"
+            }
+          ]
+        }
+      },
+      "resources": [
+        {
+          "name": "AppSrv-DSC",
+          "type": "extensions",
+          "location": "[resourceGroup().location]",
+          "apiVersion": "2015-06-15",
+          "dependsOn": [
+            "[concat('Microsoft.Compute/virtualMachines/', variables('AppSrv-1Name'))]",
+            "[concat('Microsoft.Resources/deployments/', 'VNET-Custom-DNS')]"
+          ],
+          "tags": {
+            "displayName": "AppSrv-DSC"
+          },
+          "properties": {
+            "publisher": "Microsoft.Powershell",
+            "type": "DSC",
+            "typeHandlerVersion": "2.9",
+            "autoUpgradeMinorVersion": true,
+            "settings": {
+              "modulesUrl": "[concat(parameters('_artifactsLocation'), '/', 'dsc.zip')]",
+              "sasToken": "[parameters('_artifactsLocationSasToken')]",
+              "configurationFunction": "[variables('AppSrv-DSCConfigurationFunction')]",
+              "properties": {
+                "nodeName": "[variables('AppSrv-1Name')]",
+                "DomainName": "contoso.com",
+                "Admincreds": {
+                  "UserName": "[variables('AdminUserName')]",
+                  "Password": "PrivateSettingsRef:AdminPassword"
+                }
+              }
+            },
+            "protectedSettings": {
+              "Items": {
+                "AdminPassword": "[variables('AdminPassword')]"
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "[variables('AppSrv-PublicIPName')]",
+      "type": "Microsoft.Network/publicIPAddresses",
+      "location": "[resourceGroup().location]",
+      "apiVersion": "2015-05-01-preview",
+      "dependsOn": [ ],
+      "tags": {
+        "displayName": "SAPApDB1-PublicIP"
+      },
+      "properties": {
+        "publicIPAllocationMethod": "Dynamic",
+        "dnsSettings": {
+          "domainNameLabel": "[variables('AppSrv-PublicIPDnsName')]"
+        }
+      }
+    },
+    {
+      "name": "[variables('ADPDCNicName')]",
+      "type": "Microsoft.Network/networkInterfaces",
+      "location": "[resourceGroup().location]",
+      "apiVersion": "2015-06-15",
+      "dependsOn": [
+        "[concat('Microsoft.Network/virtualNetworks/', 'VNET')]",
+        "[concat('Microsoft.Network/publicIPAddresses/', variables('ADPDC-PublicIPName'))]"
+      ],
+      "tags": {
+        "displayName": "ADPDCNic"
+      },
+      "properties": {
+        "ipConfigurations": [
+          {
+            "name": "ipconfig1",
+            "properties": {
+              "privateIPAllocationMethod": "Static",
+              "privateIPAddress": "[variables('ADPDCStaticIP')]",
+              "subnet": {
+                "id": "[variables('ADSubnetRef')]"
+              },
+              "publicIPAddress": {
+                "id": "[resourceId('Microsoft.Network/publicIPAddresses', variables('ADPDC-PublicIPName'))]"
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "[variables('ADPDCName')]",
+      "type": "Microsoft.Compute/virtualMachines",
+      "location": "[resourceGroup().location]",
+      "apiVersion": "2015-06-15",
+      "dependsOn": [
+        "[concat('Microsoft.Storage/storageAccounts/', variables('StorageName'))]",
+        "[concat('Microsoft.Network/networkInterfaces/', variables('ADPDCNicName'))]",
+      ],
+      "tags": {
+        "displayName": "ADPDC"
+      },
+      "properties": {
+        "hardwareProfile": {
+          "vmSize": "[variables('ADVmSize')]"
+        },
+        "osProfile": {
+          "computerName": "[variables('ADPDCName')]",
+          "adminUsername": "[variables('AdminUsername')]",
+          "adminPassword": "[variables('AdminPassword')]"
+        },
+        "storageProfile": {
+          "imageReference": {
+            "publisher": "[variables('ADImagePublisher')]",
+            "offer": "[variables('ADImageOffer')]",
+            "sku": "[variables('ADWindowsOSVersion')]",
+            "version": "latest"
+          },
+          "osDisk": {
+            "name": "ADPDCOSDisk",
+            "vhd": {
+              "uri": "[concat('http://', variables('StorageName'), '.blob.core.windows.net/', variables('ADStorageAccountContainerName'), '/', variables('ADPDCOSDiskName'), '.vhd')]"
+            },
+            "caching": "ReadWrite",
+            "createOption": "FromImage"
+          },
+          "dataDisks": [
+            {
+              "name": "ADPDC-DataDisk-1",
+              "lun": 0,
+              "createOption": "Empty",
+              "vhd": {
+                "uri": "[concat('http://', variables('StorageName'), '.blob.core.windows.net/', variables('AppSrv-1StorageAccountContainerName'), '/ADPDC-DataDisk-1.vhd')]"
+              },
+              "caching": "None",
+              "diskSizeGB": "1023"
+            }
+          ]
+        },
+        "networkProfile": {
+          "networkInterfaces": [
+            {
+              "id": "[resourceId('Microsoft.Network/networkInterfaces', variables('ADPDCNicName'))]"
+            }
+          ]
+        }
+      },
+      "resources": [
+        {
+          "name": "ADPDC-DSC",
+          "type": "extensions",
+          "location": "[resourceGroup().location]",
+          "apiVersion": "2015-06-15",
+          "dependsOn": [
+            "[concat('Microsoft.Compute/virtualMachines/', variables('ADPDCName'))]"
+          ],
+          "tags": {
+            "displayName": "ADPDC-DSC"
+          },
+          "properties": {
+            "publisher": "Microsoft.Powershell",
+            "type": "DSC",
+            "typeHandlerVersion": "2.9",
+            "autoUpgradeMinorVersion": true,
+            "settings": {
+              "modulesUrl": "[concat(parameters('_artifactsLocation'), '/', 'dsc.zip')]",
+              "sasToken": "[parameters('_artifactsLocationSasToken')]",
+              "configurationFunction": "[variables('ADPDC-DSCConfigurationFunction')]",
+              "properties": {
+                "nodeName": "[variables('ADPDCName')]",
+                "DomainName": "contoso.com",
+                "Admincreds": {
+                  "UserName": "[variables('AdminUserName')]",
+                  "Password": "PrivateSettingsRef:AdminPassword"
+                }
+              }
+            },
+            "protectedSettings": {
+              "Items": {
+                "AdminPassword": "[variables('AdminPassword')]"
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "[variables('ADPDC-PublicIPName')]",
+      "type": "Microsoft.Network/publicIPAddresses",
+      "location": "[resourceGroup().location]",
+      "apiVersion": "2015-06-15",
+      "dependsOn": [ ],
+      "tags": {
+        "displayName": "ADPDC-PublicIP"
+      },
+      "properties": {
+        "publicIPAllocationMethod": "Dynamic",
+        "dnsSettings": {
+          "domainNameLabel": "[variables('ADPDC-PublicIPDnsName')]"
+        }
+      }
+    },
+    {
+      "name": "VNET-Custom-DNS",
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2015-01-01",
+      "dependsOn": [
+        "[concat('Microsoft.Compute/virtualMachines/', variables('ADPDCName'), '/extensions/ADPDC-DSC')]"
+      ],
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(parameters('_artifactsLocation'), '/SAP-Azure-RG/Deployments/vnet-with-custom-dns.json', parameters('_artifactsLocationSasToken'))]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "vnetName": { "value": "VNET" },
+          "vnetPrefix": { "value": "[variables('VNETPrefix')]" },
+          "vnetSubnet1Name": { "value": "[variables('VNETSubnet1Name')]" },
+          "vnetSubnet1Prefix": { "value": "[variables('VNETSubnet1Prefix')]" },
+          "vnetSubnet2Name": { "value": "[variables('VNETSubnet2Name')]" },
+          "vnetSubnet2Prefix": { "value": "[variables('VNETSubnet2Prefix')]" },
+          "dnsServerAddress": { "value": "[variables('ADPDCStaticIP')]" }
+        }
+      }
+    }
+  ],
+  "outputs": {
+  }
+}
