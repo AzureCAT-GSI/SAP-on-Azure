@@ -1,5 +1,7 @@
 # SAP on Azure Workshop
 
+Last Update May 19 2017
+
 ## A workshop covering SAP on Azure. Consists of a combination of lectures and hands on labs demonstrating core concepts.
 
 ## Learning Objectives
