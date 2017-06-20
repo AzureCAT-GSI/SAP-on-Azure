@@ -33,7 +33,7 @@
     // SAP Server VM Settings
     "AppSrv-1Name": "SAPApDB1",
     "AppSrv-1ImagePublisher": "MicrosoftSQLServer",
-    "AppSrv-1ImageOffer": "SQL2014-WS2012R2",
+    "AppSrv-1ImageOffer": "SQL2014SP2-WS2012R2",
     "AppSrv-1OSDiskName": "SAPApDB1-OSDisk",
     "AppSrv-1VmSize": "Standard_D12",
     "AppSrv-1VnetID": "[resourceId('Microsoft.Network/virtualNetworks', 'VNET')]",
