@@ -54,7 +54,7 @@ Deep dive into business continuity for SAP on Azure, covering both High Availabi
 * SAP/SQL on Azure - SAP/Microsoft support for SQL as a RDBMS, HA/DR solution
 * SAP/HANA and HANA on Azure Large Instances  
 
-### [Infrastructure as Code](./Presentations/09_Infrastructure_as_Code?raw=1)
+### [Infrastructure as Code](./Presentations/09_Infrastructure_as_Code.pptx?raw=1)
 
 Azure offers facility via ARM template and DSC for build automation.  In this session we walk the audiences through the ARM management concept, the way to author Json templates and script Desired States Configuration for building an infrastructure for SAP. We are also showing the SAP on Azure Reference Architecture which enables repeatable, consistent deployment of Azure infrastructure for SAP  
 
