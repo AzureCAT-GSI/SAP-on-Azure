@@ -2,10 +2,10 @@
 
 Last Update June 23, 2017
 
-## A workshop covering SAP on Azure. Consists of a combination of lectures and hands on labs demonstrating core concepts.
+## A workshop covering SAP on Azure. Consists of a combination of lectures and hands-on labs demonstrating core concepts.
 
 ## Learning Objectives
-* Overview and deep dive on foundamental pillars of Azure required for SAP on Azure workloads, covering Storage, Compute and Networking in detail
+* Overview and deep dive on fundamental pillars of Azure required for SAP on Azure workloads, covering Storage, Compute and Networking in detail
 * Understanding Azure capabilities and certified solutions for SAP NetWeaver architectures on Azure
 * Deep Dive and architecture samples for SAP HANA on Azure, including Azure Large Instances   
 
